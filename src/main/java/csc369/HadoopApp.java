@@ -23,7 +23,7 @@ public class HadoopApp {
         Configuration conf = new Configuration();
         conf.set("mapreduce.input.keyvaluelinerecordreader.key.value.separator",",");
         
-        Job job = new Job(conf, "Hadoop example");
+        Job job = new Job(conf, "Lab 3");
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 
 	if (otherArgs.length < 3) {
@@ -32,9 +32,9 @@ public class HadoopApp {
 	} else if ("UserMessages".equalsIgnoreCase(otherArgs[0])) {
 
 	    MultipleInputs.addInputPath(job, new Path(otherArgs[1]),
-					KeyValueTextInputFormat.class, UserMessages.UserMapper.class );
+				TextInputFormat.class, UserMessages.UserMapper.class );
 	    MultipleInputs.addInputPath(job, new Path(otherArgs[2]),
-					TextInputFormat.class, UserMessages.MessageMapper.class ); 
+				KeyValueTextInputFormat.class, UserMessages.MessageMapper.class );
 
 	    job.setReducerClass(UserMessages.JoinReducer.class);
 

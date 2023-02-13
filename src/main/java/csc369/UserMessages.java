@@ -16,45 +16,45 @@ public class UserMessages {
     public static final Class OUTPUT_KEY_CLASS = Text.class;
     public static final Class OUTPUT_VALUE_CLASS = Text.class;
 
-    // Mapper for User file
-    public static class UserMapper extends Mapper<Text, Text, Text, Text> {
+    // Mapper for hostnames file
+    public static class MessageMapper extends Mapper<Text, Text, Text, Text> {
+
 	@Override
         public void map(Text key, Text value, Context context)  throws IOException, InterruptedException {
-	    String name = value.toString();
-	    String out = "A\t"+name;
-	    context.write(key, new Text(out));
-	} 
-    }
-
-    // Mapper for messages file
-    public static class MessageMapper extends Mapper<LongWritable, Text, Text, Text> {
-
-	@Override
-        public void map(LongWritable key, Text value, Context context)  throws IOException, InterruptedException {
-	    String text[] = value.toString().split(",");
-	    if (text.length == 2) {
-		String id = text[0];
-		String message = text[1];
-		String out = "B\t"+ message;
-		context.write(new Text(id), new Text(out));
+	    String country = value.toString();
+		String out = "A\t"+ country;
+		context.write(key, new Text(out));
 	    }
-	}
     }
 
+    // Mapper for Apache HTTP access log
+    public static class UserMapper extends Mapper<LongWritable, Text, Text, Text> {
+        @Override
+        public void map(LongWritable key, Text value, Context context)  throws IOException, InterruptedException {
+            String[] parts = value.toString().split(" ");
+            String address = parts[0];
+	        String out = "B\t1";
+	    context.write(new Text(address), new Text(out));
+        }
+    }
 
     //  Reducer: just one reducer class to perform the "join"
     public static class JoinReducer extends  Reducer<Text, Text, Text, Text> {
 
 	@Override
 	    public void reduce(Text key, Iterable<Text> values, Context context)  throws IOException, InterruptedException {
-	    ArrayList<String> name = new ArrayList();
-	    ArrayList<String> messages = new ArrayList();
+        int sum = 0;
+        Iterator<IntWritable> itr = intOne.iterator();
 
-	    for (Text val : values) {
-		context.write(key, val);
+        while (itr.hasNext()) {
+            sum  += itr.next().get();
+        }
+        result.set(sum);
+        for (Text val : values) {
+            context.write(key, val);
+        }
 	    }
 	}
-    } 
 
 
 }
