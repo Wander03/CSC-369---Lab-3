@@ -2,10 +2,6 @@ package csc369;
 
 import java.io.IOException;
 
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.conf.Configuration;
@@ -31,32 +27,33 @@ public class HadoopApp {
 	    System.exit(-1);
 	} else if ("UserMessages".equalsIgnoreCase(otherArgs[0])) {
 
-	    MultipleInputs.addInputPath(job, new Path(otherArgs[1]),
-				TextInputFormat.class, UserMessages.UserMapper.class );
-	    MultipleInputs.addInputPath(job, new Path(otherArgs[2]),
-				KeyValueTextInputFormat.class, UserMessages.MessageMapper.class );
+//	    MultipleInputs.addInputPath(job, new Path(otherArgs[1]),
+//				TextInputFormat.class, CountryCount.UserMapper.class );
+//	    MultipleInputs.addInputPath(job, new Path(otherArgs[2]),
+//				KeyValueTextInputFormat.class, CountryCount.MessageMapper.class );
+//
+//	    job.setReducerClass(CountryCount.JoinReducer.class);
+//
+//	    job.setOutputKeyClass(CountryCount.OUTPUT_KEY_CLASS);
+//	    job.setOutputValueClass(CountryCount.OUTPUT_VALUE_CLASS);
+//	    FileOutputFormat.setOutputPath(job, new Path(otherArgs[3]));
 
-	    job.setReducerClass(UserMessages.JoinReducer.class);
-
-	    job.setOutputKeyClass(UserMessages.OUTPUT_KEY_CLASS);
-	    job.setOutputValueClass(UserMessages.OUTPUT_VALUE_CLASS);
-	    FileOutputFormat.setOutputPath(job, new Path(otherArgs[3]));
-
-	} else if ("WordCount".equalsIgnoreCase(otherArgs[0])) {
-	    job.setReducerClass(WordCount.ReducerImpl.class);
-	    job.setMapperClass(WordCount.MapperImpl.class);
-	    job.setOutputKeyClass(WordCount.OUTPUT_KEY_CLASS);
-	    job.setOutputValueClass(WordCount.OUTPUT_VALUE_CLASS);
+	} else if ("KeyValueSwap".equalsIgnoreCase(otherArgs[0])) {
+		job.setReducerClass(KeyValueSwap.ReducerImpl.class);
+		job.setMapperClass(KeyValueSwap.MapperImpl.class);
+		job.setSortComparatorClass(KeyValueSwap.DescendingKeyComparator.class);
+		job.setOutputKeyClass(KeyValueSwap.OUTPUT_KEY_CLASS);
+		job.setOutputValueClass(KeyValueSwap.OUTPUT_VALUE_CLASS);
+		FileInputFormat.addInputPath(job, new Path(otherArgs[1]));
+		FileOutputFormat.setOutputPath(job, new Path(otherArgs[2]));
+	} else if ("CountryCount".equalsIgnoreCase(otherArgs[0])) {
+	    job.setReducerClass(CountryCount.AddressReducer.class);
+	    job.setMapperClass(CountryCount.AddressMapper.class);
+	    job.setOutputKeyClass(CountryCount.OUTPUT_KEY_CLASS);
+	    job.setOutputValueClass(CountryCount.OUTPUT_VALUE_CLASS);
 	    FileInputFormat.addInputPath(job, new Path(otherArgs[1]));
 	    FileOutputFormat.setOutputPath(job, new Path(otherArgs[2]));
-	} else if ("AccessLog".equalsIgnoreCase(otherArgs[0])) {
-	    job.setReducerClass(AccessLog.ReducerImpl.class);
-	    job.setMapperClass(AccessLog.MapperImpl.class);
-	    job.setOutputKeyClass(AccessLog.OUTPUT_KEY_CLASS);
-	    job.setOutputValueClass(AccessLog.OUTPUT_VALUE_CLASS);
-	    FileInputFormat.addInputPath(job, new Path(otherArgs[1]));
-	    FileOutputFormat.setOutputPath(job, new Path(otherArgs[2]));
-	} else {
+	}  else {
 	    System.out.println("Unrecognized job: " + otherArgs[0]);
 	    System.exit(-1);
 	}
