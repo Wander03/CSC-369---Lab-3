@@ -1,4 +1,4 @@
-package csc369;
+package lab3;
 
 import java.io.IOException;
 import java.util.*;

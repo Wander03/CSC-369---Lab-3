@@ -1,0 +1,88 @@
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Program 1:
+Hardcode CSV file location with country information into setup:
+    BufferedReader reader = new BufferedReader(new FileReader("input_host_name/hostname_country.csv"));
+
+> ./gradlew run --args="CountryCount input_access_log/ out_cc/part1/"
+
+Output:
+Australia	17
+Canada	127
+Denmark	4
+Finland	1
+France	16
+Germany	13
+Intranet	198
+Israel	19
+Korea	4
+Los Alamos	1
+...
+
+> ./gradlew run --args="KeyValueSwap out_cc/part1/ out_cc/part2/"
+
+Output:
+814	Unknown Location
+198	Intranet
+127	Canada
+87	United States
+80	Robot
+...
+2	Netherlands
+1	Los Alamos
+1	Taiwan
+1	Finland
+1	Mexico
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Program 2:
+Hardcode CSV file location with country information into setup:
+    BufferedReader reader = new BufferedReader(new FileReader("input_host_name/hostname_country.csv"));
+
+> ./gradlew run --args="URLCount input_access_log/ out_ulrc/part1/"
+
+Output:
+Australia	/icons/PythonPowered.png	1
+Australia	/icons/gnu-head-tiny.jpg	1
+Australia	/icons/mailman.jpg	1
+Australia	/mailman	1
+Australia	/mailman/admin	1
+Australia	/mailman/admin/webct	1
+Australia	/mailman/listinfo	2
+Australia	/mailman/listinfo/administration	1
+Australia	/mailman/listinfo/cnc_notice	1
+Australia	/twiki/bin/view/Main/SpamAssassinAndPostFix	2
+...
+
+> ./gradlew run --args="AdvancedSorting out_ulrc/part1/ out_ulrc/part2/"
+
+Output:
+Australia	/twiki/bin/view/Main/SpamAssassinDeleting	2
+Australia	/twiki/bin/view/Main/SpamAssassinAndPostFix	2
+Australia	/mailman/listinfo	2
+Australia	/icons/PythonPowered.png	1
+Australia	/mailman/listinfo/administration	1
+...
+Wherever You Want to Ship	/dccstats/stats-spam-ratio.1year.png	1
+Wherever You Want to Ship	/dccstats/stats-spam.1day.png	1
+Wherever You Want to Ship	/dccstats/stats-spam.1month.png	1
+Wherever You Want to Ship	/dccstats/stats-spam.1week.png	1
+Wherever You Want to Ship	/dccstats/stats-spam.1year.png	1
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+Program 3:
+Hardcode CSV file location with country information into setup:
+    BufferedReader reader = new BufferedReader(new FileReader("input_host_name/hostname_country.csv"));
+
+> ./gradlew run --args="CountryList input_access_log/ out_cl/"
+
+Output:
+/	Canada, France, Intranet, Israel, Netherlands, Robot, United Kingdom, United States, Unknown Location, Wherever You Want to Ship
+/AmavisNew.html	United States, Unknown Location
+/DCC.html	United Kingdom, Unknown Location
+/LateEmail.html	Canada, United States, Unknown Location
+/M83A	Taiwan
+...
+/twiki/pub/TWiki/TWikiDocGraphics/tip.gif	France
+/twiki/pub/TWiki/TWikiLogos/twikiRobot131x64.gif	France
+/twiki/pub/TWiki/TWikiLogos/twikiRobot46x50.gif	Australia, Canada, Denmark, France, Germany, Israel, Spain, United States, Unknown Location
+/twiki/pub/TWiki/TWikiLogos/twikiRobot88x31.gif	France
+/twiki/view/Main/WebHome	Canada
+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

@@ -1,23 +1,24 @@
-package csc369;
+package lab3;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.util.hash.Hash;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
-
-public class CountryCount {
+public class CountryList {
 
     public static final Class OUTPUT_KEY_CLASS = Text.class;
-    public static final Class OUTPUT_VALUE_CLASS = IntWritable.class;
+    public static final Class OUTPUT_VALUE_CLASS = Text.class;
 
     // Mapper for Apache HTTP access log
-    public static class AddressMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class AddressMapper extends Mapper<LongWritable, Text, Text, Text> {
         private Map<String, String> hostnameMap;
 
         @Override
@@ -37,22 +38,21 @@ public class CountryCount {
         public void map(LongWritable key, Text value, Context context)  throws IOException, InterruptedException {
             String[] parts = value.toString().split(" ");
             String address = parts[0];
-	    context.write(new Text(hostnameMap.get(address)), new IntWritable(1));
+	    context.write(new Text(parts[6]), new Text(hostnameMap.get(address)));
         }
     }
 
-    //  Reducer: just one reducer class to perform the "join"
-    public static class AddressReducer extends  Reducer<Text, IntWritable, Text, IntWritable> {
-        private IntWritable result = new IntWritable();
+    public static class AddressReducer extends  Reducer<Text, Text, Text, Text> {
         @Override
-        public void reduce(Text key, Iterable<IntWritable> intOne, Context context)  throws IOException, InterruptedException {
-            int sum = 0;
-
-            for (IntWritable intWritable : intOne) {
-                sum += intWritable.get();
+        public void reduce(Text key, Iterable<Text> country, Context context)  throws IOException, InterruptedException {
+            HashSet<String> result = new HashSet<>();
+            for (Text c : country) {
+                result.add(c.toString());
             }
-            result.set(sum);
-            context.write(key, result);
+            List<String> sortedResult = new ArrayList<>(result);
+            Collections.sort(sortedResult);
+            String countryList = String.join(", ", sortedResult);
+            context.write(key, new Text(countryList));
         }
 	}
 
